@@ -5,15 +5,15 @@
  */
 var splitArray = function(nums, k) {
     let low = Math.max(...nums)
-    let high = nums.reduce((acc, curr) => acc + curr, 0)
+    let high = nums.reduce((a, b) => a + b, 0)
 
-    while (low <= high) {
+    while(low <= high) {
         let mid = Math.floor((low + high) / 2)
 
-        if(countSum(nums, mid) <= k) {
-            high = mid - 1
-        } else {
+        if(countSum(nums, mid) > k) {
             low = mid + 1
+        } else {
+            high = mid - 1
         }
     }
 
@@ -21,18 +21,18 @@ var splitArray = function(nums, k) {
 };
 
 function countSum(arr, sum) {
-    let N = arr.length 
+    let count = 1
     let totalSum = 0
-    let partitions = 1
 
-    for(let i = 0; i < N; i++) {
-        if(totalSum + arr[i] <= sum ) {
+    for(let i = 0; i < arr.length; i++) {
+        if(totalSum + arr[i] <= sum) {
             totalSum += arr[i]
         } else {
-            partitions++
-            totalSum = arr[i]
-        } 
-    } 
+            count++
+            totalSum = arr[i] 
+        }
+    }
 
-    return partitions
+    return count
 }
+
