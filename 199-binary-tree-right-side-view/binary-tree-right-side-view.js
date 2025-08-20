@@ -11,23 +11,21 @@
  * @return {number[]}
  */
 var rightSideView = function(root) {
-    if(!root) return []
 
-    const rightView = []
-    const queue = [root]
+    function dfs(node, level, result) {
+        if(!node) return 
 
-    while(queue.length) {
-        const size = queue.length 
+        if(level === result.length) result.push(node.val)
 
-        for(let i = 0; i < size; i++) {
-            const node = queue.shift()
+        const first = node.right
+        const second = node.left
 
-            if(i === size - 1) rightView.push(node.val)
-
-            if(node.left) queue.push(node.left)
-            if(node.right) queue.push(node.right) 
-        }
+        dfs(first, level + 1, result)
+        dfs(second, level + 1, result)
     }
 
-    return rightView
+    const result = []
+
+    dfs(root, 0, result)
+    return result 
 };
