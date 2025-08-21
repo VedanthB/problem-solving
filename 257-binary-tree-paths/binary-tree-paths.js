@@ -12,22 +12,25 @@
  */
 var binaryTreePaths = function(root) {
     const result = []
+    const path = []
     if(!root) return res 
 
-    function dfs(node, path) {
+    function dfs(node) {
         if(!node) return
 
-        const newPath = [...path, node.val]
+        path.push(node.val)
 
         if(!node.left && !node.right) {
-            result.push(newPath.join('->'))
+            result.push(path.join('->'))
+        } else {
+            dfs(node.left)
+            dfs(node.right)
         }
-
-        dfs(node.left, newPath)
-        dfs(node.right, newPath)
+        
+        path.pop()
     }
 
-    dfs(root, [])
+    dfs(root)
 
     return result 
 };
