@@ -3,54 +3,17 @@
  * @return {number[][]}
  */
 var generate = function(numRows) {
-    function generateRow(n) {
-        let result = 1
+    const result = []
 
-        let resultRow = [1]
+    for(let row = 0; row < numRows; row++) {
+        const currentRow = new Array(row + 1).fill(1)
 
-        for(let i = 1; i < n ; i++){
-            result = result * (n - i)
-            result = result / i 
-
-            resultRow.push(result)
+        for(let col = 1; col < row; col++) {
+            currentRow[col] = result[row - 1][col - 1] + result[row - 1][col]
         }
 
-        return resultRow
-    }
-    let ans = []
-
-    for(let i = 1; i <= numRows; i++) {
-        ans.push(generateRow(i))
+        result.push(currentRow)
     }
 
-    return ans
+    return result
 };
-
-// Brute Force Approach 
-
-
-function nCr(n, r) {
-    let res = 1;
-  
-    // calculating nCr:
-    for (let i = 0; i < r; i++) {
-      res = res * (n - i);
-      res = res / (i + 1);
-    }
-    return parseInt(res);
-}
-  
-function pascalTriangle(n) {
-    const ans = [];
-  
-    //Store the entire pascal's triangle:
-    for (let row = 1; row <= n; row++) {
-      const tempLst = []; // temporary list
-      for (let col = 1; col <= row; col++) {
-        tempLst.push(nCr(row - 1, col - 1));
-      }
-      ans.push(tempLst);
-    }
-    return ans;
-}
-  
