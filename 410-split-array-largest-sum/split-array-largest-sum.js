@@ -4,35 +4,46 @@
  * @return {number}
  */
 var splitArray = function(nums, k) {
-    let low = Math.max(...nums)
-    let high = nums.reduce((a, b) => a + b, 0)
+    const n = nums.length 
 
+    if(k > n) return -1
+
+    let low = 0
+    let high = 0
+
+    for(const num of nums) {
+        low = Math.max(low, num)
+        high += num
+    }
+
+    function canSplit(maxSum) {
+        let needed = 1
+        let current = 0
+
+        for(const num of nums) {
+            if(num + current <= maxSum) {
+                current += num
+            } else {
+                needed += 1
+                current = num
+                if(needed > k) return false 
+            }
+        } 
+
+        return true
+    }
+
+    let answer = high
     while(low <= high) {
-        let mid = Math.floor((low + high) / 2)
+        const mid = Math.floor((low + high) / 2)
 
-        if(countSum(nums, mid) > k) {
-            low = mid + 1
-        } else {
+        if(canSplit(mid)) {
+            answer = mid
             high = mid - 1
-        }
-    }
-
-    return low
-};
-
-function countSum(arr, sum) {
-    let count = 1
-    let totalSum = 0
-
-    for(let i = 0; i < arr.length; i++) {
-        if(totalSum + arr[i] <= sum) {
-            totalSum += arr[i]
         } else {
-            count++
-            totalSum = arr[i] 
+            low = mid + 1
         }
     }
 
-    return count
-}
-
+    return answer
+};
