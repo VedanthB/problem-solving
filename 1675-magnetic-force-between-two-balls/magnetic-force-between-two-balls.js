@@ -4,38 +4,39 @@
  * @return {number}
  */
 var maxDistance = function(position, m) {
-    position.sort((a , b) => a - b)
-    let N = position.length
+    const positions = [...position].sort((a, b) => a - b)
+    const n = positions.length 
 
-    let low = 1, high = position[N - 1] - position[0]
+    function canPlace(minGap) {
+        let placed = 1
+        let lastPos = positions[0]
 
-    while(low <= high) {
-        let mid = Math.floor((low + high) / 2) 
+        for(let i = 1; i < n; i++) {
+            if(positions[i] - lastPos >= minGap) {
+                placed++
+                lastPos = positions[i]
 
-        if(canPlaceBalls(position, mid, m) === false) {
-            high = mid - 1
-        } else {
-            low = mid + 1
-        }       
-    }
-
-    return high
-};
-
-function canPlaceBalls(arr, distance, balls) {
-    let N = arr.length
-    let last = arr[0]
-    let ballsInBag = 1
-
-    for(let i = 0; i < N; i++) {
-        
-        if(arr[i] - last >= distance) {
-            ballsInBag++
-            last = arr[i]
+                if(placed >= m) return true
+            }
         }
 
-        if(ballsInBag >= balls) return true
+        return false
     }
 
-    return false
-}
+    let low = 0
+    let high = positions[n - 1] - positions[0]
+    let best = 0
+
+    while(low <= high) {
+        const mid = Math.floor((low + high) / 2)
+
+        if(canPlace(mid)) {
+            best = mid
+            low = mid + 1
+        } else {
+            high = mid - 1
+        }
+    }  
+
+    return best
+};
