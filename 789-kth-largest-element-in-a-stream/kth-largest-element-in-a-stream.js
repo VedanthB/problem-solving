@@ -1,4 +1,4 @@
-class MinHeap {
+class MyMinHeap {
   constructor() { this.a = []; }
   _parent(i) { return (i - 1) >> 1; }
   _left(i) { return (i << 1) + 1; }
@@ -48,7 +48,7 @@ class MinHeap {
  */
 var KthLargest = function(k, nums) {
     this.k = k
-    this.heap = new MinHeap()
+    this.heap = new MyMinHeap()
 
     for(const num of nums) {
         this.heap.push(num)
