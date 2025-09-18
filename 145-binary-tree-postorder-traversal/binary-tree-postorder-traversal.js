@@ -11,23 +11,17 @@
  * @return {number[]}
  */
 var postorderTraversal = function(root) {
-        if(!root) return []
+    let result = []
 
-        let stack1 = [root]
-        let stack2 = []
-        let result = []
+    function dfs(current) {
+        if(current === null) return 
 
-        while(stack1.length > 0) {
-            let node = stack1.pop()
-            stack2.push(node)
+        dfs(current.left)
+        dfs(current.right)
+        result.push(current.val)
+    }
 
-            if(node.left) stack1.push(node.left)
-            if(node.right) stack1.push(node.right)
-        }
+    dfs(root)
 
-        while(stack2.length > 0) {
-            result.push(stack2.pop().val)
-        }
-
-        return result    
+    return result
 };
