@@ -6,17 +6,18 @@ var nextGreaterElements = function(nums) {
     const n = nums.length
     const result = new Array(n).fill(-1)
 
-    for(let i = 0; i < n; i++) {
-        const value = nums[i]
+    const stack = []
 
-        for(let j = 1; j < n; j++) {
-            const next = (i + j) % n
+    for(let i = 0; i < 2 * n - 1; i++) {
+        const currentIndex = i % n 
+        const currentValue = nums[currentIndex]
 
-            if(nums[next] > value){
-                result[i] = nums[next]
-                break
-            }
+        while(stack.length && nums[stack[[stack.length - 1]]] < currentValue) {
+            const indexNeedingNextGreater = stack.pop()
+            result[indexNeedingNextGreater] = currentValue
         }
+
+        if(i < n) stack.push(i)
     }
 
     return result
