@@ -13,26 +13,28 @@
  */
 var buildTree = function(preorder, inorder) {
     const n = preorder.length 
-    if(n === 0) return []
+    if(n === 0) return null
 
-    const indexMap = new Map()
-    
-    for(let i = 0; i < n; i ++) indexMap.set(inorder[i], i)
-    let prePos = 0
+    const inOrderMap = new Map()
+    for(let i = 0; i < n; i++) {
+        inOrderMap.set(inorder[i], i)
+    }
 
-    function helper(inL, inR) {
-        if(inL > inR) return null
+    let preorderIndex = 0
 
-        const rootVal = preorder[prePos++]
+    function dfs(l, r) {
+        if(l > r) return null
+
+        const rootVal = preorder[preorderIndex++]
+
         const root = new TreeNode(rootVal)
+        const splitIndex = inOrderMap.get(rootVal)
 
-        const mid = indexMap.get(rootVal)
-
-        root.left = helper(inL, mid - 1)
-        root.right = helper(mid + 1, inR)
+        root.left = dfs(l, splitIndex - 1)
+        root.right = dfs(splitIndex + 1, r)
 
         return root
     }
 
-    return helper(0, n - 1)
+    return dfs(0, inorder.length - 1)
 };
