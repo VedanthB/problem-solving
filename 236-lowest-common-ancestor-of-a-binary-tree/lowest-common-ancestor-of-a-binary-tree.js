@@ -12,19 +12,16 @@
  * @return {TreeNode}
  */
 var lowestCommonAncestor = function(root, p, q) {
-    const match = (node, t) => typeof t === 'object' ? node === t : node.val === t
-
     function dfs(node) {
-        if(!node) return 
+        if(!node) return null
+        if(node === p || node === q) return node
 
-        if(match(node, p) || match(node, q)) return node
+        const l = dfs(node.left)
+        const r = dfs(node.right)
 
-        const left = dfs(node.left)
-        const right = dfs(node.right)
+        if(l && r) return node
 
-        if(left && right) return node
-
-        return left || right
+        return l || r
     }
 
     return dfs(root)
