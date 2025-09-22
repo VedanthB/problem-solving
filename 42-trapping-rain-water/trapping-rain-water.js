@@ -6,24 +6,23 @@ var trap = function(height) {
     const n = height.length
     if(n < 3) return 0
 
-    const leftmax = Array(n).fill(0)
-    const rightmax = Array(n).fill(0)
-
-    leftmax[0] = height[0]
-    for(let i = 1; i < n; i++) {
-        leftmax[i] = Math.max(leftmax[i - 1], height[i])
-    }
-
-    rightmax[n - 1] = height[n - 1] 
-    for(let i = n - 2; i >= 0; i--) {
-        rightmax[i] = Math.max(rightmax[i + 1], height[i])
-    }
-
+    let left = 0
+    let right = n - 1
+    let leftmax = 0
+    let rightmax = 0
     let total = 0
-    for(let i = 0; i < n; i++) {
-        const waterhere = Math.min(leftmax[i], rightmax[i]) - height[i]
 
-        if(waterhere > 0) total += waterhere
+    while(left <= right) {
+        leftmax = Math.max(leftmax, height[left])
+        rightmax = Math.max(rightmax, height[right])
+
+        if(leftmax <= rightmax) {
+            total += leftmax - height[left]
+            left++
+        } else {
+            total += rightmax - height[right]
+            right--
+        }
     }
 
     return total
