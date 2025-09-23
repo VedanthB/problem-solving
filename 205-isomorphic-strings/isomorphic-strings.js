@@ -4,17 +4,18 @@
  * @return {boolean}
  */
 var isIsomorphic = function(s, t) {
-    const mapS = new Array(128).fill(0)
-    const mapT = new Array(128).fill(0)
+    const mapS = new Map()
+    const mapT = new Map()
 
     for(let i = 0; i < s.length; i++) {
-        const codeS = s.charCodeAt(i)
-        const codeT = t.charCodeAt(i)
+        const cs = s[i]
+        const ct = t[i]
 
-        if(mapS[codeS] !== mapT[codeT]) return false
+        if(mapS.has(cs) && mapS.get(cs) !== ct) return false
+        if(mapT.has(ct) && mapT.get(ct) !== cs) return false
 
-        mapS[codeS] = i + 1
-        mapT[codeT] = i + 1
+        mapS.set(cs, ct)
+        mapT.set(ct, cs)
     }
 
     return true
