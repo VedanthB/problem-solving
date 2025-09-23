@@ -3,42 +3,38 @@
  * @return {number[]}
  */
 var spiralOrder = function(matrix) {
-    const n = matrix.length, m = matrix[0].length
+    const rows = matrix.length 
+    const cols = matrix[0].length
 
     const result = []
-    let top = 0,
-    bottom = n - 1,
-    left = 0,
-    right = m - 1 
+    let top = 0
+    let bottom = rows - 1
+    let left = 0
+    let right = cols - 1
 
     while(top <= bottom && left <= right) {
-        // top row 
-        for(let col = left; col <= right; col++) {
-            result.push(matrix[top][col])
+        for(let i = left; i <= right; i++) {
+            result.push(matrix[top][i])
         }
-        top += 1
+        top++
 
-        // right col
-        for(let row = top; row <= bottom; row++) {
-            result.push(matrix[row][right])
+        for(let i = top; i <= bottom; i++) {
+            result.push(matrix[i][right])
         }
-        right -= 1
-
-        // bottom row
+        right--
+        
         if(top <= bottom) {
-            for(let col = right; col >= left; col--){
-                result.push(matrix[bottom][col])
+            for(let i = right; i >= left; i--) {
+                result.push(matrix[bottom][i])
             }
-            bottom -= 1
+            bottom--
         }
-
-        // left col
+        
         if(left <= right) {
-            for(let row = bottom; row >= top; row--) {
-                result.push(matrix[row][left])
+            for(let i = bottom; i >= top; i--) {
+                result.push(matrix[i][left])
             }
-
-            left += 1
+            left++
         }
     }
 
