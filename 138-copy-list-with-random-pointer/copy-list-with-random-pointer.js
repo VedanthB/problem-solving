@@ -12,30 +12,23 @@
  * @return {_Node}
  */
 var copyRandomList = function(head) {
-    if(!head) return head
+    if(head === null) return null
+
+    const ogToCopy = new Map()
 
     let current = head
     while(current) {
-        const cloned = new _Node(current.val, current.next, null) 
-        current.next = cloned
-        current = cloned.next
-    }
-
-    current = head
-    while(current) {
-        const cloned = current.next
-        cloned.random = current.random ? current.random.next : null
-        current = cloned.next
-    }
-
-    current = head
-    let clonedHead = head.next
-    while(current) {
-        const cloned = current.next
-        current.next = cloned.next
-        cloned.next = cloned.next ? cloned.next.next : null
+        ogToCopy.set(current, new _Node(current.val))
         current = current.next
     }
 
-    return clonedHead
+    current = head
+    while(current) {
+        const ogCopy = ogToCopy.get(current)
+        ogCopy.next = current.next ? ogToCopy.get(current.next) : null
+        ogCopy.random = current.random ? ogToCopy.get(current.random) : null
+        current = current.next
+    }
+    
+    return ogToCopy.get(head)
 };
