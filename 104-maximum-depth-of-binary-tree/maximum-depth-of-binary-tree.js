@@ -13,16 +13,18 @@
 var maxDepth = function(root) {
     if(!root) return 0
 
-    let maxDepth = 0
-    let stack = [[root, 1]]
+    const queue = [[root,1]]
+    let head = 0
 
-    while(stack.length) {
-        let [node, depth] = stack.pop()
+    let maxDepth = 0
+
+    while(head < queue.length) {
+        const [node, depth] = queue[head++]
 
         maxDepth = Math.max(maxDepth, depth)
 
-        if(node.left) stack.push([node.left, depth + 1])
-        if(node.right) stack.push([node.right, depth + 1])
+        if(node.left) queue.push([node.left, depth + 1])
+        if(node.right) queue.push([node.right, depth + 1])
     }
 
     return maxDepth
