@@ -11,29 +11,16 @@
  * @return {boolean}
  */
 var isValidBST = function(root) {
-    let curr = root
-    let prev = null
 
-    while(curr) {
-        if(!curr.left) {
-            if(prev !== null && curr.val  <= prev) return false
-            prev = curr.val
-            curr = curr.right
-        } else {
-            let pred = curr.left
-            while(pred.right && pred.right !== curr) pred = pred.right
+    function dfs(node, lb, ub) {
+        if(!node) return true
 
-            if(!pred.right) {
-                pred.right = curr
-                curr = curr.left
-            } else {
-                pred.right = null
-                if(prev !== null && curr.val  <= prev) return false
-                prev = curr.val
-                curr = curr.right
-            }
-        }
+        const val = node.val
+
+        if(val <= lb || val >= ub) return false
+
+        return dfs(node.left, lb, val) && dfs(node.right, val, ub)
     }
 
-    return true
+    return dfs(root, -Infinity, Infinity)
 };
