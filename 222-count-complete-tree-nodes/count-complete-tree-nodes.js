@@ -12,34 +12,28 @@
  */
 var countNodes = function(root) {
     
-    function leftHeight(node) {
-        let h = 0
-
-        while(node) { h++; node = node.left}
-
-        return h 
-    }
-
-    function rightHeight(node) {
-        let h = 0
-
-        while(node) { h++; node = node.right}
-
-        return h 
-    }
-
     function dfs(node) {
         if(!node) return 0
 
-        const lh = leftHeight(node)
-        const rh = rightHeight(node)
+        const leftHeight = _getHeight(node, true)
+        const rightHeight = _getHeight(node, false)
 
-        if(lh === rh) {
-            return (1 << lh) - 1 // 2^h - 1
+        if(leftHeight === rightHeight) {
+            return (1 << leftHeight) - 1 // 2^h - 1
         }
 
         return 1 + dfs(node.left) + dfs(node.right)
     }
 
+    function _getHeight(node, goLeft) {
+        let h = 0
+        while(node) {
+            h++
+            node = goLeft ? node.left : node.right
+        }
+        return h
+    }
+    
     return dfs(root)
 };
+
