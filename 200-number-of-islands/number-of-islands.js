@@ -3,40 +3,32 @@
  * @return {number}
  */
 var numIslands = function(grid) {
-    const rows = grid.length
-    if(rows === 0) return 0
+    const board = grid.map(i => i.slice())
 
-    const cols = grid[0].length
-    if(cols === 0) return 0
-
-    const visited = Array.from({ length : rows }, () => new Array(cols).fill(false))
-
-    function inBounds(r, c) {
-        return r >= 0 && r < rows && c >=0 && c < cols
-    }
+    const rows = board.length 
+    const cols = board[0].length 
 
     const dirs = [
-        [0, -1], // r
-        [0, 1], // l
-        [1, 0], // u
-        [-1, 0], // d
-        // [1, 1], // tl
-        // [-1, 1], // bl
-        // [1, -1], // tr
-        // [-1, -1], // br
+        [-1, 0],
+        [1, 0],
+        [0, -1],
+        [0, 1],
     ]
-    let islandCount = 0
 
-    for(let r = 0; r < rows; r++) {
-        for(let c = 0; c < cols; c++) {
-            if(grid[r][c] === "1" && !visited[r][c]) {
-                islandCount += 1
+    function inBounds(r, c) {
+        return r >= 0 && r < rows && c >= 0 && c < cols
+    }
 
-                const queue = [[r, c]]
+    let islands = 0
 
-                visited[r][c] = true
+    for(let i = 0; i < rows; i++) {
+        for(let j = 0; j < cols; j++) {
+            if(board[i][j] === '1') {
+                islands++
 
+                const queue = [[i, j]]
                 let head = 0
+                board[i][j] = "0"
 
                 while(head < queue.length) {
                     const [cr, cc] = queue[head++]
@@ -44,15 +36,15 @@ var numIslands = function(grid) {
                     for(const [dr, dc] of dirs) {
                         const nr = dr + cr, nc = dc + cc
 
-                        if(inBounds(nr, nc) && !visited[nr][nc] && grid[nr][nc] === "1") {
-                            visited[nr][nc] = true
+                        if(inBounds(nr, nc) && board[nr][nc] === '1') {
+                            board[nr][nc] = "0"
                             queue.push([nr, nc])
                         }
-                    }
+                    } 
                 }
             }
         }
     }
 
-    return islandCount
+    return islands
 };
