@@ -12,30 +12,25 @@
  * @return {number}
  */
 var kthSmallest = function(root, k) {
-    let curr = root 
-    let result = null
     let count = 0
+    let answer = null
 
-    while(curr) {
-        if(!curr.left) {
-            count++
-            if(count === k) result = curr.val
-            curr = curr.right 
-        } else {
-            let pred = curr.left
-            while(pred.right && pred.right !== curr) pred = pred.right
+    function dfs(node) {
+        if(!node) return 
+        
+        dfs(node.left)
 
-            if(!pred.right) {
-                pred.right = curr
-                curr = curr.left
-            }  else {
-                pred.right = null
-                count++
-                if(count === k) result = curr.val
-                curr = curr.right 
-            }  
+        if(answer !== null) return 
+        count++
+        if(count === k) {
+            answer = node.val
+            return 
         }
+
+        dfs(node.right)
     }
 
-    return result 
+    dfs(root)
+
+    return answer
 };
