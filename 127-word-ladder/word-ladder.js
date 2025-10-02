@@ -5,49 +5,37 @@
  * @return {number}
  */
 var ladderLength = function(beginWord, endWord, wordList) {
-    const words = new Set(wordList)
-    if(!words.has(endWord)) return 0
-    words.add(beginWord)
+    const dictionary = new Set(wordList)
 
-    const list = Array.from(words)
+    if(!dictionary.has(endWord)) return 0
 
-    const indexMap = new Map(list.map((w, i) => [w, i]))
-    const adj = Array.from({ length: list.length }, () => [])
+    const visited = new Set([beginWord])
+    const queue = [[beginWord, 1]]
+    
+    while(queue.length) {
+        const [word, length] = queue.shift()
 
-    const differByOne = (a, b) => {
-        let diff = 0
-        for(let i = 0; i < a.length; i++) {
-            if(a[i] !== b[i]) diff++
+        if(word === endWord) return length
 
-            if(diff > 1) return false
-        }
-        return diff === 1
-    } 
+        const chars = word.split("")
 
-    for(let i = 0; i < list.length; i++) {
-        for(let j = i + 1; j < list.length; j++){
-            if(differByOne(list[i], list[j])) {
-                adj[i].push(j)
-                adj[j].push(i)
+        for(let i = 0; i < chars.length; i++) {
+            const og = chars[i]
+
+            for(let code = 97; code <= 122; code++) {
+                const nextChar = String.fromCharCode(code)
+                if(nextChar === og) continue
+
+                chars[i] = nextChar
+                const mutated = chars.join("")
+                chars[i] = og
+
+                if(dictionary.has(mutated) && !visited.has(mutated)) {
+                    visited.add(mutated)
+                    queue.push([mutated, length + 1])
+                }
             }
-        }
-    } 
-
-    const startIndex = indexMap.get(beginWord)
-    const targetIndex = indexMap.get(endWord)
-    const queue = [startIndex]
-    const dist = new Array(list.length).fill(-1)
-    let head = 0
-    dist[startIndex] = 1
-
-    while(head < queue.length) {
-        const currentIndex = queue[head++]
-        if(currentIndex === targetIndex) return dist[currentIndex]
-        for(const nei of adj[currentIndex]) {
-            if(dist[nei] !== -1) continue
-            dist[nei] = dist[currentIndex] + 1
-            queue.push(nei)
-        }
+        } 
     }
 
     return 0
