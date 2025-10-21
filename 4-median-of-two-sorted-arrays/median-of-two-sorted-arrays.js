@@ -4,45 +4,39 @@
  * @return {number}
  */
 var findMedianSortedArrays = function(nums1, nums2) {
-    let N = nums1.length,  // Length of the first array
-      M = nums2.length;  // Length of the second array
+    if(nums1.length > nums2.length) return findMedianSortedArrays(nums2, nums1)
 
-    if(N > M) return findMedianSortedArrays(nums2, nums1)
+    const m = nums1.length 
+    const n = nums2.length 
 
-    let totalLength = M + N  
-    let noOfLeftElements = Math.floor((totalLength + 1) / 2)   
+    const half = Math.floor((m + n + 1) / 2)
 
-    let low = 0 
-    let high = N
+    let left = 0
+    let right = m
 
-    while(low <= high) {
-        let mid1 = Math.floor((low + high) / 2)
-        let mid2 = noOfLeftElements - mid1
+    while(left <= right) {
+        const i = left + ((right - left) >> 1) 
+        const j = half - i
 
-        let l1 = -Infinity
-        let l2 = -Infinity
-        let r1 = Infinity
-        let r2 = Infinity
-        
-        if(mid1 - 1 >= 0) l1 = nums1[mid1 - 1]
-        if(mid2 - 1 >= 0) l2 = nums2[mid2 - 1]
-        if(mid1 < N) r1 = nums1[mid1]
-        if(mid2 < M) r2 = nums2[mid2]
+        const nums1LeftMax = i > 0 ? nums1[i - 1] : -Infinity
+        const nums1RightMin = i < m ? nums1[i] : Infinity
+        const nums2LeftMax = j > 0 ? nums2[j - 1] : -Infinity
+        const nums2RightMin = j < n ? nums2[j] : Infinity
 
-        if(l1 <= r2 && l2 <= r1) {
-            if(totalLength % 2 === 1) {
-                const median = Math.max(l1, l2)
-
-                return median
+        if(nums1LeftMax <= nums2RightMin && nums2LeftMax <= nums1RightMin) {
+            if((m + n) % 2 === 1) {
+                return Math.max(nums1LeftMax, nums2LeftMax) 
             } else {
-                const median = Math.max(l1, l2) + Math.min(r1,r2)
-
-                return median / 2
+                const leftMax = Math.max(nums1LeftMax, nums2LeftMax)
+                const rightMin = Math.min(nums1RightMin, nums2RightMin)
+                return (leftMax + rightMin) / 2
             }
-        } else if (l1 > r2) {
-            high = mid1 - 1
+        }
+
+        if(nums1LeftMax > nums2RightMin) {
+            right = i - 1
         } else {
-            low = mid1 + 1
+            left = i + 1
         }
     }
 
