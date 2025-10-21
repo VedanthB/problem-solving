@@ -1,68 +1,66 @@
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {number}
- */
+class MyMinHeap {
+  constructor() {
+    this.heap = [];
+  }
 
-class MinHeap {
-    constructor() {
-        this.heap = []
+  push(x) {
+    this.heap.push(x);
+    this._bubbleUp(this.heap.length - 1);
+  }
+
+  pop() {
+    if (this.heap.length === 0) return undefined;
+    const top = this.heap[0];
+    const last = this.heap.pop();
+    if (this.heap.length > 0) {
+      this.heap[0] = last;
+      this._bubbleDown(0);
     }
+    return top;
+  }
 
-    push(val) {
-        this.heap.push(val)
-        this._bubbleUp(this.heap.length - 1)
+  top() {
+    return this.heap.length ? this.heap[0] : undefined;
+  }
+
+  _bubbleUp(i) {
+    while (i > 0) {
+      const p = this._parent(i);
+      if (this.heap[p] <= this.heap[i]) break;
+      this._swap(p, i);        // swap by indices
+      i = p;
     }
+  }
 
-    pop() {
-        const top = this.heap[0]
-        const end = this.heap.pop()
-
-        if(this.heap.length) {
-            this.heap[0] = end 
-            this._bubbleDown(0)
-        } 
-
-        return top
+  _bubbleDown(i) {
+    const n = this.heap.length;
+    while (true) {
+      let smallest = i;
+      const l = this._left(i), r = this._right(i);
+      if (l < n && this.heap[l] < this.heap[smallest]) smallest = l;
+      if (r < n && this.heap[r] < this.heap[smallest]) smallest = r;
+      if (smallest === i) break;
+      this._swap(i, smallest); // swap by indices
+      i = smallest;
     }
+  }
 
-    _bubbleUp(i) {
-        while(i > 0) {
-            const parent = Math.floor((i - 1) / 2)
-            if(this.heap[parent] <= this.heap[i]) break
-            [this.heap[parent], this.heap[i]] = [this.heap[i], this.heap[parent]]
-            i = parent
-        }
-    }
+  _parent(i) { return (i - 1) >> 1; }   // or Math.floor((i - 1) / 2)
+  _left(i)   { return (i << 1) + 1; }
+  _right(i)  { return (i << 1) + 2; }
 
-    _bubbleDown(i) {
-        const n = this.heap.length 
-        while(true) {
-            let smallest = i
-            const l = 2 * i + 1, r = 2 * i + 2
-
-            if(l < n && this.heap[l] < this.heap[smallest]) smallest = l
-            if(r < n && this.heap[r] < this.heap[smallest]) smallest = r
-
-            if(smallest === i) break
-
-            [this.heap[smallest], this.heap[i]] = [this.heap[i], this.heap[smallest]]
-            i = smallest
-        }
-    }
-
-    top() {
-        return this.heap[0]
-    }
+  _swap(i, j) {
+    [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+  }
 }
 
 var findKthLargest = function(nums, k) {
-    const heap = new MinHeap()
+  const heap = new MyMinHeap();
 
-    for(let num of nums) {
-        heap.push(num)
-        if(heap.heap.length > k) heap.pop()
-    }
+  for (const num of nums) {
+    heap.push(num);
+    if (heap.heap.length > k) heap.pop();
+  }
 
-    return heap.top()
+  return heap.top();
 };
