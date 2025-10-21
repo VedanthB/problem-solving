@@ -4,14 +4,14 @@
  */
 var maxSubArray = function(nums) {
     let bestSum = nums[0]
-    let currentSum = nums[0]
+    let currentBest = nums[0]
 
     for(let i = 1; i < nums.length; i++) {
         const val = nums[i]
 
-        currentSum = Math.max(val, currentSum + val)
+        currentBest  = Math.max(val, currentBest + val)
 
-        if(currentSum > bestSum) bestSum = currentSum
+        if(currentBest > bestSum) bestSum = currentBest
     }
 
     return bestSum
