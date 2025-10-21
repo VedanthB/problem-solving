@@ -4,30 +4,22 @@
  * @return {boolean}
  */
 var searchMatrix = function(matrix, target) {
-  for (let i = 0; i < matrix.length; i++) {
-    if(matrix[i][0] <= target &&  matrix[i][matrix[i].length - 1] >= target) {
-        return binarySearch(matrix[i], target);
-    }
-  }
-  
-  return false;
-};
+    const m = matrix.length
+    const n = matrix[0].length 
 
-function binarySearch(matrix, target) {
-    let low = 0
-    let high = matrix.length - 1
+    let left = 0
+    let right = m * n - 1
 
-    while(low <= high) {
-        let mid = Math.floor((low + high) / 2)
+    while(left <= right) {
+        const mid = left + ((right - left) >> 1)
+        const r = Math.floor(mid / n)
+        const c = mid % n
+        const val = matrix[r][c]
 
-        if(matrix[mid] === target) {
-            return true
-        } else if (matrix[mid] > target) { 
-            high = mid - 1
-        } else {
-            low = mid + 1
-        }
+        if(val === target) return true
+        if(val < target) left = mid + 1
+        else right = mid - 1
     }
 
     return false
-}
+};
