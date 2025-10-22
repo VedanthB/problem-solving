@@ -5,25 +5,19 @@
 var minPathSum = function(grid) {
     const m = grid.length, n = grid[0].length 
 
-    const dp = Array.from({ length: m }, (_, r) =>
-        new Array(n).fill(undefined)
-    );
+   const dp = new Array(n).fill(0)
 
-    function dfs(r, c) {
-        if(r === m - 1 && c === n - 1) {
-            dp[r][c] = grid[r][c];
-            return dp[r][c]
-        }
+   dp[0] = grid[0][0]
 
-        if(dp[r][c] !== undefined) return dp[r][c]
-        
-        let best = Infinity
-        if(r + 1 < m) best = Math.min(best, dfs(r + 1, c))
-        if(c + 1 < n) best = Math.min(best, dfs(r, c + 1))
+   for(let c = 1; c < n; c++) dp[c] = dp[c - 1] + grid[0][c]
 
-        dp[r][c] = grid[r][c] + best
-        return dp[r][c] 
-    }
+   for(let r = 1; r < m; r++) {
+    dp[0] += grid[r][0]
 
-    return dfs(0,0)
+    for(let c = 1; c < n; c++) {
+        dp[c] = grid[r][c] + Math.min(dp[c], dp[c - 1])
+    } 
+   }
+
+   return dp[n - 1]
 };
