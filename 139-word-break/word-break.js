@@ -13,8 +13,13 @@ var wordBreak = function(s, wordDict) {
     dp[0] = true
 
     for(let i = 1; i <= n ;i++) {
-        for(let j = Math.max(0, i - maxL); j < i; j++) {
-            if(dp[j] && dict.has(s.slice(j, i))) {
+        const startJ = Math.max(0, i - maxL)
+
+        for(let j = i - 1; j >= startJ; j--) {
+            if(!dp[j]) continue
+
+            const piece = s.slice(j, i)
+            if(dict.has(piece)) {
                 dp[i] = true
                 break
             }
