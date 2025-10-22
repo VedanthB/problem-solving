@@ -3,20 +3,22 @@
  * @return {number}
  */
 var uniquePathsWithObstacles = function(obstacleGrid) {
-    const n = obstacleGrid.length
-    const m = obstacleGrid[0].length
-    const memo = Array.from({ length: n }, () => new Array(m).fill(-1))
+    const m = obstacleGrid.length, n = obstacleGrid[0].length 
 
-    function dfs(r, c) {
-        if(r >= n || c >= m) return 0
-        if(obstacleGrid[r][c] === 1) return 0
-        if(r === n - 1 && c === m - 1) return 1
+    if(obstacleGrid[0][0] === 1 || obstacleGrid[m - 1][n - 1] === 1) return 0
 
-        if(memo[r][c] !== -1) return memo[r][c]
+    const dp = new Array(n).fill(0)
+    dp[0] = 1
 
-        memo[r][c] = dfs(r, c + 1) + dfs(r + 1, c)
-        return memo[r][c]
-    } 
+    for(let r = 0; r < m; r++) {
+        for(let c = 0; c < n; c++) {
+            if(obstacleGrid[r][c] === 1) {
+                dp[c] = 0
+            } else if(c > 0) {
+                dp[c] += dp[c - 1] 
+            }
+        }
+    }
 
-    return dfs(0, 0)
+    return dp[n -1]
 };
