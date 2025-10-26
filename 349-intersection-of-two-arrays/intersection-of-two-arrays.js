@@ -4,29 +4,29 @@
  * @return {number[]}
  */
 var intersection = function(nums1, nums2) {
-    let nums1Set = new Set(nums1)
-    let result = new Set()
+    nums1.sort((a, b) => a - b)
+    nums2.sort((a, b) => a - b)
 
-    for(let num of nums2) {
-        if(nums1Set.has(num)) {
-            result.add(num)
+    const result = []
+    let i = 0, j = 0
+
+    const n = nums1.length, m = nums2.length 
+
+    while(i < nums1.length && j < nums2.length) {
+        const a = nums1[i], b = nums2[j]
+        
+        if(a === b) {
+            if(result.length === 0 || result[result.length - 1] !== a) 
+            result.push(a)
+            i++
+            j++
+        } else if(b < a) {
+            j++
+        } else {
+            i++
         }
+        
     }
 
-    return Array.from(result)
+    return result
 };
-
-// Brute force approach 
-
-function intersectionOfSortedArrays(nums1, nums2) {
-  let result = [];
- 
-  for (let i = 0; i < nums1.length; i++) {
-    // Check if the element is in nums2 and not already in the result
-    if (nums2.includes(nums1[i]) && !result.includes(nums1[i])) {
-      result.push(nums1[i]);
-    }
-  }
- 
-  return result;
-}
