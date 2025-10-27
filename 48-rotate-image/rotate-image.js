@@ -3,7 +3,7 @@
  * @return {void} Do not return anything, modify matrix in-place instead.
  */
 var rotate = function(matrix) {
-    const n = matrix.length
+    const n = matrix.length 
 
     for(let i = 0; i < n; i++) {
         for(let j = i + 1; j < n; j++) {
@@ -11,9 +11,7 @@ var rotate = function(matrix) {
         }
     }
 
-    for(let i = 0; i < n; i++) {
-        matrix[i].reverse() 
+    for(const row of matrix) {
+        row.reverse()
     }
-
-    return matrix
 };
