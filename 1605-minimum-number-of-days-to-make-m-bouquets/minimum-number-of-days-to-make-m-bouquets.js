@@ -5,47 +5,37 @@
  * @return {number}
  */
 var minDays = function(bloomDay, m, k) {
-    const n = bloomDay.length 
+    function canMake(day) {
+        let bouquets = 0
+        let flowers = 0
 
-    if(m * k > n) return -1
-
-    let low = Infinity
-    let high = -Infinity
-
-    for(const day of bloomDay) {
-        if(day < low) low = day
-        if(day > high) high = day
-    }
-
-    function canMakeBouqets(days) {
-        let bloomed = 0, bouqetCount = 0
-
-        for(const day of bloomDay) {
-            if(day <= days) {
-                bloomed += 1
-
-                if(bloomed === k) {
-                    bouqetCount += 1
-                    bloomed = 0
-                    if(bouqetCount > m) return true
+        for(let bloom of bloomDay) {
+            if(bloom <= day) {
+                flowers++
+                if(flowers === k) {
+                    bouquets++
+                    flowers = 0
                 }
             } else {
-                bloomed = 0
+                flowers = 0
             }
         }
 
-        return bouqetCount >= m
+        return bouquets >= m
     }
 
-    while(low < high) {
-        const mid = Math.floor((low + high) / 2)
+    let left = 1, right = Math.max(...bloomDay), answer = -1
 
-        if(canMakeBouqets(mid)) {
-            high = mid
+    while(left <= right) {
+        const mid = left + ((right - left) >> 1)
+
+        if(canMake(mid)) {
+            answer = mid
+            right = mid - 1
         } else {
-            low = mid + 1
+            left = mid + 1
         }
     }
 
-    return low 
+    return answer
 };
