@@ -4,44 +4,26 @@
  * @return {number[]}
  */
 var searchRange = function(nums, target) {
-    const n = nums.length 
-    
-    function lowerBound() {
-        let l = 0, r = n - 1, ans = n
+    function findBound(isFirst) {
+        let left = 0, right = nums.length - 1, res = -1
 
-        while(l <= r) {
-            const m = l + ((r - l) >> 1)
-            if(nums[m] >= target) {
-                ans = m
-                r = m - 1
+        while(left <= right) {
+            const mid = left + ((right - left) >> 1)
+
+            if(nums[mid] === target) {
+                res = mid
+
+                if(isFirst) right = mid - 1
+                else left = mid + 1
+            } else if (nums[mid] < target) {
+                left = mid + 1
             } else {
-                l = m + 1
+                right = mid - 1
             }
-        }
+        } 
 
-        return ans
-    }
-    function upperBound() {
-        let l = 0, r = n - 1, ans = n
-
-        while(l <= r) {
-            const m = l + ((r - l) >> 1)
-            if(nums[m] > target) {
-                ans = m
-                r = m - 1
-            } else {
-                l = m + 1
-            }
-        }
-
-        return ans
+        return res
     }
 
-    const first = lowerBound()
-
-    if(first === n || nums[first] !== target) return [-1, -1]
-
-    const last = upperBound() - 1
-
-    return [first, last]
+    return [findBound(true), findBound(false)]
 };
