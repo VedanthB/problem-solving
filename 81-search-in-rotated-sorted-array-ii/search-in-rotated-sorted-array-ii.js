@@ -4,22 +4,18 @@
  * @return {boolean}
  */
 var search = function(nums, target) {
-    let left = 0
-    let right = nums.length - 1
+    let left = 0, right = nums.length - 1
 
     while(left <= right) {
-        const mid = Math.floor((left + right) / 2)
+        const mid = left + ((right - left) >> 1)
 
         if(nums[mid] === target) return true
 
         if(nums[left] === nums[mid] && nums[mid] === nums[right]) {
             left++
             right--
-            continue
-        } 
-
-        if(nums[left] <= nums[mid]) {
-            if(nums[left] <= target && target < nums[mid]) {
+        } else if(nums[left] <= nums[mid]) {
+            if(nums[left] <= target && target <= nums[mid]) {
                 right = mid - 1
             } else {
                 left = mid + 1
@@ -31,7 +27,7 @@ var search = function(nums, target) {
                 right = mid - 1
             }
         }
-    }
+    } 
 
     return false
 };
